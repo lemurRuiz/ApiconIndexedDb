@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/ApiconIndexedDb/static/css/main.adb9275f.css",
-    "main.js": "/ApiconIndexedDb/static/js/main.1f297009.js",
+    "main.css": "/ApiconIndexedDb/static/css/main.a06c5c8b.css",
+    "main.js": "/ApiconIndexedDb/static/js/main.957916ef.js",
     "static/js/453.6cb25c40.chunk.js": "/ApiconIndexedDb/static/js/453.6cb25c40.chunk.js",
     "service-worker.js": "/ApiconIndexedDb/service-worker.js",
     "index.html": "/ApiconIndexedDb/index.html",
-    "main.adb9275f.css.map": "/ApiconIndexedDb/static/css/main.adb9275f.css.map",
-    "main.1f297009.js.map": "/ApiconIndexedDb/static/js/main.1f297009.js.map",
+    "main.a06c5c8b.css.map": "/ApiconIndexedDb/static/css/main.a06c5c8b.css.map",
+    "main.957916ef.js.map": "/ApiconIndexedDb/static/js/main.957916ef.js.map",
     "453.6cb25c40.chunk.js.map": "/ApiconIndexedDb/static/js/453.6cb25c40.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.adb9275f.css",
-    "static/js/main.1f297009.js"
+    "static/css/main.a06c5c8b.css",
+    "static/js/main.957916ef.js"
   ]
 }
