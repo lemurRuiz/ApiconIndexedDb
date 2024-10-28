@@ -1,10 +1,11 @@
-// api.js
+
 import axios from 'axios';
 import { openDB } from 'idb';
 
 const API_URL = 'https://www.swapi.tech/api';
 const DB_NAME = 'StarWarsDB';
 const STORE_NAME = 'people';
+
 
 async function initDB() {
   return openDB(DB_NAME, 1, {
@@ -15,6 +16,7 @@ async function initDB() {
     },
   });
 }
+
 
 export const getPeople = async () => {
   const db = await initDB();
@@ -42,7 +44,7 @@ export const getPeople = async () => {
   }
 };
 
-// Exportación de getPersonDetails
+
 export const getPersonDetails = async (personId) => {
   const db = await initDB();
   const store = db.transaction(STORE_NAME, 'readonly').objectStore(STORE_NAME);

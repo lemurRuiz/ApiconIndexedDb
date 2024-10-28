@@ -1,3 +1,4 @@
+// serviceWorkerRegistration.js
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
   window.location.hostname === '[::1]' ||
@@ -15,7 +16,7 @@ export function register(config) {
       if (isLocalhost) {
         checkValidServiceWorker(swUrl, config);
         navigator.serviceWorker.ready.then(() => {
-          console.log('This web app is being served cache-first by a service worker.');
+          console.log('Esta aplicación está siendo servida en caché por un Service Worker.');
         });
       } else {
         registerValidSW(swUrl, config);
@@ -25,47 +26,58 @@ export function register(config) {
 }
 
 function registerValidSW(swUrl, config) {
-  navigator.serviceWorker.register(swUrl)
+  navigator.serviceWorker
+    .register(swUrl)
     .then((registration) => {
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
-        if (installingWorker == null) return;
-
-        installingWorker.onstatechange = () => {
-          if (installingWorker.state === 'installed') {
-            if (navigator.serviceWorker.controller) {
-              console.log('New content is available and will be used when all tabs are closed.');
-              if (config && config.onUpdate) config.onUpdate(registration);
-            } else {
-              console.log('Content is cached for offline use.');
-              if (config && config.onSuccess) config.onSuccess(registration);
+        if (installingWorker) {
+          installingWorker.onstatechange = () => {
+            if (installingWorker.state === 'installed') {
+              if (navigator.serviceWorker.controller) {
+                console.log('Nuevo contenido disponible, cierre todas las pestañas para actualizar.');
+                if (config && config.onUpdate) {
+                  config.onUpdate(registration);
+                }
+              } else {
+                console.log('Contenido cacheado para uso sin conexión.');
+                if (config && config.onSuccess) {
+                  config.onSuccess(registration);
+                }
+              }
             }
-          }
-        };
+          };
+        }
       };
     })
-    .catch((error) => console.error('Error during service worker registration:', error));
+    .catch((error) => {
+      console.error('Error al registrar el Service Worker:', error);
+    });
 }
 
 function checkValidServiceWorker(swUrl, config) {
   fetch(swUrl, { headers: { 'Service-Worker': 'script' } })
     .then((response) => {
       const contentType = response.headers.get('content-type');
-      if (response.status === 404 || (contentType != null && contentType.indexOf('javascript') === -1)) {
+      if (response.status === 404 || (contentType && contentType.indexOf('javascript') === -1)) {
         navigator.serviceWorker.ready.then((registration) => {
-          registration.unregister().then(() => window.location.reload());
+          registration.unregister().then(() => {
+            window.location.reload();
+          });
         });
       } else {
         registerValidSW(swUrl, config);
       }
     })
-    .catch(() => console.log('No internet connection found. App is running in offline mode.'));
+    .catch(() => {
+      console.log('No hay conexión a Internet. La aplicación se está ejecutando en modo sin conexión.');
+    });
 }
 
 export function unregister() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready
-      .then((registration) => registration.unregister())
-      .catch((error) => console.error(error.message));
+    navigator.serviceWorker.ready.then((registration) => {
+      registration.unregister();
+    });
   }
 }

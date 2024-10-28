@@ -1,3 +1,4 @@
+// service-worker.js
 /* eslint-disable no-restricted-globals */
 
 import { clientsClaim } from 'workbox-core';
@@ -7,7 +8,6 @@ import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
 
 clientsClaim();
-
 precacheAndRoute(self.__WB_MANIFEST);
 
 const fileExtensionRegexp = new RegExp('/[^/?]+\\.[^/]+$');
@@ -25,25 +25,28 @@ registerRoute(
   ({ url }) => url.origin === self.location.origin && url.pathname.endsWith('.png'),
   new StaleWhileRevalidate({
     cacheName: 'images',
-    plugins: [
-      new ExpirationPlugin({ maxEntries: 50 }),
-    ],
+    plugins: [new ExpirationPlugin({ maxEntries: 50 })],
   })
 );
 
-// Activa el nuevo Service Worker tan pronto como esté listo
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
 });
 
-self.addEventListener('install', (event) => {
-  console.log('Service Worker instalado');
-  self.skipWaiting(); // Forzamos la activación del nuevo SW inmediatamente
-});
 
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker activado');
-  clientsClaim();
+  event.waitUntil(
+    (async () => {
+      console.log('Service Worker activado');
+      const dbs = await indexedDB.databases();
+      dbs.forEach((db) => {
+        if (db.name === 'StarWarsDB') {
+          indexedDB.deleteDatabase(db.name);
+        }
+      });
+      self.clients.claim();
+    })()
+  );
 });
