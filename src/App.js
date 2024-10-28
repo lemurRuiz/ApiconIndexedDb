@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getPeople, getPersonDetails } from './api';
 import './App.css';
+import InstallPrompt from './components/InstallPrompt';
 
 function App() {
   const [people, setPeople] = useState([]);
@@ -39,6 +40,7 @@ function App() {
   return (
     <div className="App">
       <h1>Personajes de Star Wars</h1>
+      <InstallPrompt />
       <div className="grid">
         {people.map((person) => (
           <div key={person.uid} className="card">
