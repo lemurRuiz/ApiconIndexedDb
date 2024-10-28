@@ -22,9 +22,9 @@ function App() {
 
         // Actualizar el estado de la aplicación con los datos obtenidos
         setPeople(detailedPeople);
-        setLoading(false);
       } catch (error) {
         console.error('Error al obtener los datos:', error);
+      } finally {
         setLoading(false);
       }
     }
