@@ -1,38 +1,93 @@
+/* Estilos generales */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f4f8;
+}
+
 .App {
   text-align: center;
+  padding: 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Título principal */
+h1 {
+  color: #333;
+  font-size: 3rem;
+  margin-bottom: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Grid para las cards */
+.grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 1200px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+/* Estilo para las cards */
+.card {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  overflow: hidden;
+  text-align: left;
+  border: 1px solid #ddd;
 }
 
-.App-link {
-  color: #61dafb;
+/* Efecto hover para las cards */
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Imagen en la card */
+.card img {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  margin-right: 15px;
+  float: left;
 }
+
+/* Contenedor del contenido */
+.card-content {
+  overflow: hidden;
+}
+
+/* Título con estilo original */
+.card h3 {
+  color: #FF6347; /* Tomate */
+  font-size: 1.1rem;
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+}
+
+/* Subtítulo */
+.card h6 {
+  color: #666;
+  font-size: 1.2rem;
+  margin-top: 5px;
+}
+
+/* Descripción del contenido */
+.card p {
+  color: #555;
+  font-size: 0.9rem;
+  margin-top: 15px;
+  line-height: 1.5;
+  background-color: #f7f7f7;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* Ajustes de responsividad */
+
