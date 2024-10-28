@@ -1,3 +1,4 @@
+// api.js
 import axios from 'axios';
 import { openDB } from 'idb';
 
@@ -5,64 +6,64 @@ const API_URL = 'https://www.swapi.tech/api';
 const DB_NAME = 'StarWarsDB';
 const STORE_NAME = 'people';
 
-// Inicializa la base de datos de IndexedDB
 async function initDB() {
-  try {
-    console.log('Inicializando IndexedDB...');
-    
-    // Incrementa la versión para forzar la creación del objeto store si no existe
-    return openDB(DB_NAME, 2, {
-      upgrade(db) {
-        if (!db.objectStoreNames.contains(STORE_NAME)) {
-          db.createObjectStore(STORE_NAME, { keyPath: 'uid' });
-          console.log('Object store creado:', STORE_NAME);
-        }
-      },
-    });
-  } catch (error) {
-    console.error('Error al inicializar IndexedDB:', error);
-    throw error;
-  }
+  return openDB(DB_NAME, 1, {
+    upgrade(db) {
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: 'uid' });
+      }
+    },
+  });
 }
 
-// Guarda datos en IndexedDB
-async function savePeopleToDB(people) {
+export const getPeople = async () => {
   const db = await initDB();
-  const tx = db.transaction(STORE_NAME, 'readwrite');
-  const store = tx.objectStore(STORE_NAME);
-  await Promise.all(people.map(person => store.put(person)));
-  await tx.done;
-}
+  const store = db.transaction(STORE_NAME, 'readonly').objectStore(STORE_NAME);
+  const cachedData = await store.getAll();
 
-// Obtiene datos de IndexedDB
-async function getPeopleFromDB() {
-  const db = await initDB();
-  const tx = db.transaction(STORE_NAME, 'readonly');
-  const store = tx.objectStore(STORE_NAME);
-  return await store.getAll();
-}
-
-// Obtiene datos de la API y los guarda en IndexedDB
-export async function fetchAndCachePeople() {
-  try {
-    const response = await axios.get(`${API_URL}/people`);
-    const people = response.data.results;
-
-    await savePeopleToDB(people);
-    return people;
-  } catch (error) {
-    console.error('Error fetching people from API:', error);
-    return [];
-  }
-}
-
-// Obtiene personas, priorizando los datos en IndexedDB
-export async function getPeople() {
-  const peopleFromDB = await getPeopleFromDB();
-
-  if (peopleFromDB.length > 0) {
-    return peopleFromDB;
+  if (cachedData.length) {
+    return cachedData;
   } else {
-    return await fetchAndCachePeople();
+    try {
+      const response = await axios.get(`${API_URL}/people`);
+      const people = response.data.results;
+
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      for (const person of people) {
+        tx.store.put(person);
+      }
+      await tx.done;
+
+      return people;
+    } catch (error) {
+      console.error('Error al obtener personajes de la API', error);
+      throw error;
+    }
   }
-}
+};
+
+// Exportación de getPersonDetails
+export const getPersonDetails = async (personId) => {
+  const db = await initDB();
+  const store = db.transaction(STORE_NAME, 'readonly').objectStore(STORE_NAME);
+  const cachedPerson = await store.get(personId);
+
+  if (cachedPerson && cachedPerson.details) {
+    return cachedPerson.details;
+  } else {
+    try {
+      const response = await axios.get(`${API_URL}/people/${personId}`);
+      const details = response.data.result.properties;
+
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const person = await tx.store.get(personId);
+      tx.store.put({ ...person, details });
+      await tx.done;
+
+      return details;
+    } catch (error) {
+      console.error('Error al obtener detalles del personaje desde la API', error);
+      throw error;
+    }
+  }
+};
