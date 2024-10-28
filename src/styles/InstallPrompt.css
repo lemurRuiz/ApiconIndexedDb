@@ -3,15 +3,13 @@
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
+    width: 90%; /* Adapta para pantallas móviles */
+    max-width: 400px; /* Límite para pantallas grandes */
     background-color: #ffffff;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     padding: 16px;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
     z-index: 1000;
     animation: fadeIn 0.5s ease-in-out;
   }
@@ -23,19 +21,25 @@
   }
   
   .install-btn, .close-btn {
+    width: 100%; /* Botones ocupan todo el ancho en móvil */
+    max-width: 200px;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .install-btn {
     background-color: #4CAF50;
     color: white;
-    border: none;
-    padding: 10px 20px;
-    margin: 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
   }
   
   .close-btn {
     background-color: #f44336;
+    color: white;
   }
   
   .install-btn:hover {
@@ -49,11 +53,11 @@
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateX(-50%) translateY(20px);
+      transform: translateY(20px);
     }
     to {
       opacity: 1;
-      transform: translateX(-50%) translateY(0);
+      transform: translateY(0);
     }
   }
   

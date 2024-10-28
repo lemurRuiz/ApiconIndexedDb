@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/InstallPrompt.css'; 
+import '../styles/InstallPrompt.css';
 
 const InstallPrompt = () => {
   const [installPrompt, setInstallPrompt] = useState(null);
@@ -7,15 +7,18 @@ const InstallPrompt = () => {
   const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
+    // Verifica si la app ya está instalada en el dispositivo.
     window.addEventListener('appinstalled', () => {
+      console.log('Aplicación instalada');
       setIsInstalled(true);
-      setShowAlert(false);
+      setShowAlert(false); // Oculta la alerta si ya está instalada.
     });
 
+    // Escucha el evento beforeinstallprompt (PC y móvil).
     window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault(); 
-      setInstallPrompt(e);
-      setShowAlert(true); 
+      e.preventDefault(); // Evita que el navegador muestre el prompt por defecto.
+      setInstallPrompt(e); // Guarda el evento para invocarlo manualmente.
+      setShowAlert(true); // Muestra la alerta personalizada.
     });
 
     return () => {
@@ -26,14 +29,14 @@ const InstallPrompt = () => {
 
   const handleInstallClick = () => {
     if (installPrompt) {
-      installPrompt.prompt();
+      installPrompt.prompt(); // Lanza el prompt de instalación.
       installPrompt.userChoice.then((choice) => {
         if (choice.outcome === 'accepted') {
-          console.log('El usuario aceptó la instalación');
+          console.log('Usuario aceptó la instalación');
         } else {
-          console.log('El usuario rechazó la instalación');
+          console.log('Usuario rechazó la instalación');
         }
-        setShowAlert(false); 
+        setShowAlert(false); // Oculta la alerta después de la decisión.
       });
     }
   };
